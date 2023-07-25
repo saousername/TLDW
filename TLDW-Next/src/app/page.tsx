@@ -46,11 +46,11 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-1">
               <h1 className="text-center font-semibold text-4xl text-blue-600 tracking-tighter">TLDW</h1>
               <h2 className="text-center font-light text-xl text-blue-500 tracking-tighter">
-                Too Long, Don't Watch
+                Too Long, Don&apos;t Watch
               </h2>
             </div>
             <p className="text-center">
-              Enter a video URL and we'll give you the gist of what you'd learn from the video.
+              Enter a video URL and we&apos;ll give you the gist of what you&apos;d learn from the video.
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center max-w-[400px] space-y-1">
             <p className="2xl:max-w-[70vw] text-center text-lg text-blue-600 tracking-tight">LOADING</p>
             <p className="2xl:max-w-[70vw] text-center font-light text-blue-400 tracking-tight">
-              This shouldn't take more than a minute or so though.
+              This shouldn&apos;t take more than a minute or so though.
             </p>
             <img
               className="w-full"
