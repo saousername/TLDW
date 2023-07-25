@@ -9,7 +9,7 @@ import { Configuration, OpenAIApi } from "openai";
 // 4. Profit
 
 // TODO: SWAP TO ENVIRONMENT VARIABLE WITH PROCESS.ENV OR SVELTE ALTERNATIVE AND CREATE .ENV FILE (DON'T FORGOT TO DEFINE .ENV VARIABLE ON VERCEL)
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 async function getVideoCaptions(videoUrl: string): Promise<string | null> {
     try {
