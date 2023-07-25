@@ -15,7 +15,7 @@ export default function Home() {
 
   async function generateSummary() {
 		setLoading(true);
-		const responseObject = await fetch(`/api/generate?videoUrl=${videoUrl}`);
+		const responseObject = await fetch(`http://tldw-transcription-service-272d748790d5.herokuapp.com/api/summarize_video?videoUrl=${videoUrl}`);
 
 		if (responseObject.status !== 200) {
 			setSpit('error: api call failed!');

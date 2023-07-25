@@ -7,8 +7,6 @@ import { Configuration, OpenAIApi } from "openai";
 
 import { NextResponse } from 'next/server'
 
-export const runtime = 'edge'
-
 const SECRET_OPENAI_API_KEY = process.env.NEXT_PRIVATE_OPENAI_API_KEY;
 
 export async function GET(request: Request) {
@@ -45,7 +43,9 @@ async function getVideoCaptions(videoUrl: string): Promise<string | null> {
         if (!videoId) {
             throw new Error("Unable to extract Video ID from URL.");
         }
-        const transcriptionCall = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/get_captions?video_id=${videoId}`)
+        const transcriptionCall = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/get_captions?video_id=${videoId}`, {
+
+        })
 
         const transcription = transcriptionCall.text();
 
