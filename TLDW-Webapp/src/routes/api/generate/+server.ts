@@ -2,6 +2,7 @@ import { json } from "@sveltejs/kit";
 import type { RequestEvent } from "./$types";
 
 import { Configuration, OpenAIApi } from "openai";
+import { SECRET_OPENAI_API_KEY } from '$env/static/private'
 
 // 1. Get YouTube video transcript from YouTube's API
 // 2. Give transcript to ChatGPT API with a prompt "Summarize this video for me given the above transcript"
@@ -9,7 +10,6 @@ import { Configuration, OpenAIApi } from "openai";
 // 4. Profit
 
 // TODO: SWAP TO ENVIRONMENT VARIABLE WITH PROCESS.ENV OR SVELTE ALTERNATIVE AND CREATE .ENV FILE (DON'T FORGOT TO DEFINE .ENV VARIABLE ON VERCEL)
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 async function getVideoCaptions(videoUrl: string): Promise<string | null> {
     try {
@@ -63,7 +63,7 @@ export async function GET({ request, params, url }: RequestEvent) {
 
 async function processTranscriptionThroughAI(transcription: string): Promise<string | undefined> {
     const configuration = new Configuration({
-        apiKey: OPENAI_API_KEY,
+        apiKey: SECRET_OPENAI_API_KEY,
     });
 
     const openai = new OpenAIApi(configuration);
