@@ -14,7 +14,7 @@
 
 	async function generateSummary() {
 		loading = true;
-		const responseObject = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/get_captions?video_id=${videoUrl}`);
+		const responseObject = await fetch(`/api/generate?videoUrl=${videoUrl}`);
 
 		if (responseObject.status !== 200) {
 			spit = 'error: api call failed!';

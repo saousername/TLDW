@@ -17,7 +17,7 @@ async function getVideoCaptions(videoUrl: string): Promise<string | null> {
         if (!videoId) {
             throw new Error("Unable to extract Video ID from URL.");
         }
-        const transcriptionCall = await fetch(`https://accurateadmiredfirmware.saousername.repl.co/api/get_captions?video_id=${videoId}`)
+        const transcriptionCall = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/get_captions?video_id=${videoId}`)
 
         const transcription = transcriptionCall.text();
 
