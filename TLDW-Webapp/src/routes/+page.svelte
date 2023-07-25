@@ -30,6 +30,7 @@
 		loading = false;
 	}
 
+	// @ts-ignore
 	function formatSpit(toFormat) {
 		return sanitizeHtml(md.render(toFormat), {
 			allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'img'])
@@ -51,7 +52,7 @@
 			</p>
 		</div>
 
-		<div class="flex flex-col items-center justify-center space-y-3">
+		<div class="flex flex-col items-center justify-center space-y-3 max-w-[500px] w-full">
 			<input
 				class="bg-gray-100 p-3 w-full"
 				bind:value={videoUrl}
