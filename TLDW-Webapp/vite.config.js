@@ -4,11 +4,11 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	build: {
-		rollupOptions: {
-		  external: [
-			"node:markdown-it",
-			"node:sanitize-html",
-		  ]
-		}
+		// rollupOptions: {
+		//   external: [
+		// 	"node:markdown-it",
+		// 	"node:sanitize-html",
+		//   ]
+		// }
 	}
 });
