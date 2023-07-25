@@ -7,6 +7,8 @@ import { Configuration, OpenAIApi } from "openai";
 
 import { NextResponse } from 'next/server'
 
+export const runtime = 'edge'
+
 const SECRET_OPENAI_API_KEY = process.env.NEXT_PRIVATE_OPENAI_API_KEY;
 
 export async function GET(request: Request) {
