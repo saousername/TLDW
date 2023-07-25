@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@rollup/plugin-node-resolve": "^15.1.0",
 		"markdown-it": "^13.0.1",
 		"openai": "^3.3.0",
 		"sanitize-html": "^2.11.0"
