@@ -15,7 +15,7 @@ export default function Home() {
 
   async function generateSummary() {
 		setLoading(true);
-		const responseObject = await fetch(`http://tldw-transcription-service-272d748790d5.herokuapp.com/api/summarize_video?videoUrl=${videoUrl}`);
+		const responseObject = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/summarize_video?videoUrl=${videoUrl}`);
 
 		if (responseObject.status !== 200) {
 			setSpit('error: api call failed!');
@@ -80,7 +80,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center max-w-[400px] space-y-1">
             <p className="2xl:max-w-[70vw] text-center text-lg text-blue-600 tracking-tight">LOADING</p>
             <p className="2xl:max-w-[70vw] text-center font-light text-blue-400 tracking-tight">
-              This shouldn&apos;t take more than a minute or so though.
+              This shouldn&apos;t take more than a minute or so.
             </p>
             <img
               className="w-full"
