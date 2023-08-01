@@ -12,13 +12,16 @@ export default function Home() {
   const [videoUrl, setVideoUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [spit, setSpit] = useState(!testing ? 'Not generated a summary yet...' : (test_spit));
+  const [error, setError] = useState("");
 
   async function generateSummary() {
 		setLoading(true);
 		const responseObject = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/summarize_video?videoUrl=${videoUrl}`);
+    // const responseObject = await fetch(`http://127.0.0.1:5000/api/summarize_video?videoUrl=${videoUrl}`);
 
 		if (responseObject.status !== 200) {
-			setSpit('error: api call failed!');
+      const rjson = await responseObject.json()
+			setSpit(`## An error occured while connecting to the API.\n### Error Message: ${"```"+rjson.errorMessage+"```" || "Error was external so no valid error message can be provided. Likely to be a timeout or heroku error."}`);
 			setLoading(false);
 			return;
 		}
@@ -78,14 +81,14 @@ export default function Home() {
 
         {loading ?
           <div className="flex flex-col items-center justify-center max-w-[400px] space-y-1">
-            <p className="2xl:max-w-[70vw] text-center text-lg text-blue-600 tracking-tight">LOADING</p>
+            <p className="2xl:max-w-[70vw] text-center text-lg text-blue-600 tracking-tight">GENERATING...</p>
             <p className="2xl:max-w-[70vw] text-center font-light text-blue-400 tracking-tight">
               This shouldn&apos;t take more than a minute or so.
             </p>
             <img
               className="w-full"
               alt="Funny loading GIF of child sat on chair bored while waiting for page to load"
-              src="https://media.tenor.com/Y7ShQ_3hnn8AAAAd/me-waiting-for-my-friends-to-get-online.gif"
+              src="https://media.tenor.com/3dFHbSGVvqgAAAAC/robot-dancing.gif"
             />
           </div>
           :
