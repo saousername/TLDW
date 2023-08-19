@@ -11,13 +11,20 @@ import { Configuration, OpenAIApi } from "openai";
 export default function Home() {
   const testing = false;
   const [videoUrl, setVideoUrl] = useState("");
-  const [AiAPIKey, setAiAPIKeyDirectly] = useState(localStorage.getItem('aiApiKey') || '');
+  const [AiAPIKey, setAiAPIKeyDirectly] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('aiApiKey') || '';
+    }
+    return '';
+  });
   const [loading, setLoading] = useState(false);
   const [spit, setSpit] = useState(!testing ? 'Not generated a summary yet...' : (test_spit));
   const [error, setError] = useState("");
 
   function setAiAPIKey(apiKey: string) {
-    localStorage.setItem('aiApiKey', apiKey);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('aiApiKey', apiKey);
+    }
     setAiAPIKeyDirectly(apiKey);
   }
 
