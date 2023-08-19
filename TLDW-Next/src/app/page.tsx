@@ -6,40 +6,74 @@ import { useState } from 'react'
 // import sanitizeHtml from 'sanitize-html';
 import ReactMarkdown from 'react-markdown'
 import { test_spit } from './test_spit';
+import { Configuration, OpenAIApi } from "openai";
 
 export default function Home() {
   const testing = false;
   const [videoUrl, setVideoUrl] = useState("");
+  const [AiAPIKey, setAiAPIKeyDirectly] = useState(localStorage.getItem('aiApiKey') || '');
   const [loading, setLoading] = useState(false);
   const [spit, setSpit] = useState(!testing ? 'Not generated a summary yet...' : (test_spit));
   const [error, setError] = useState("");
 
+  function setAiAPIKey(apiKey: string) {
+    localStorage.setItem('aiApiKey', apiKey);
+    setAiAPIKeyDirectly(apiKey);
+  }
+
+  async function processTranscriptionThroughAI(transcription: string): Promise<string> {
+    const configuration = new Configuration({
+        apiKey: AiAPIKey,
+    });
+
+    const openai = new OpenAIApi(configuration);
+
+    try {
+        const completion = await openai.createChatCompletion({
+            model: "gpt-4-0613",
+            messages: [
+                { "role": "system", "content": "The user will give you a transcription of a YouTube video. You should use this transcription to summarise the video into a TLDW (Too long, don't watch). You should use markdown to format the notes in a way that is efficient to read. Use bullet points when necessary." },
+                { role: "user", content: transcription }
+            ],
+        });
+
+        const responseString: string | undefined = completion.data.choices[0]?.message?.content;
+
+        return responseString || "";
+    } catch (error: any) {
+        console.log(error);
+        return error.toString();
+    }
+}
+
   async function generateSummary() {
-		setLoading(true);
-		const responseObject = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/summarize_video?videoUrl=${videoUrl}`);
+    setLoading(true);
+    const transcriptResponseObject = await fetch(`https://tldw-transcription-service-272d748790d5.herokuapp.com/api/get_transcript?videoUrl=${videoUrl}`);
     // const responseObject = await fetch(`http://127.0.0.1:5000/api/summarize_video?videoUrl=${videoUrl}`);
 
-		if (responseObject.status !== 200) {
-      const rjson = await responseObject.json()
-			setSpit(`## An error occured while connecting to the API.\n### Error Message: ${"```"+rjson.errorMessage+"```" || "Error was external so no valid error message can be provided. Likely to be a timeout or heroku error."}`);
-			setLoading(false);
-			return;
-		}
+    if (transcriptResponseObject.status !== 200) {
+      const rjson = await transcriptResponseObject.json()
+      setSpit(`## An error occured while connecting to the API.\n### Error Message: ${"```" + rjson.errorMessage + "```" || "Error was external so no valid error message can be provided. Likely to be a timeout or heroku error."}`);
+      setLoading(false);
+      return;
+    }
 
-		const responseJson = await responseObject.json();
-		const responseSpit = responseJson.spit;
+    const responseJson = await transcriptResponseObject.json();
+    const responseTranscript = responseJson.transcription;
 
-		console.log(responseSpit);
-		setSpit(responseSpit);
-		setLoading(false);
-	}
+    const spit = await processTranscriptionThroughAI(responseTranscript) || "Error";
 
-	// @ts-ignore
-	// function formatSpit(toFormat) {
-	// 	return sanitizeHtml(md.render(toFormat), {
-	// 		allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'img'])
-	// 	});
-	// }
+    console.log(responseTranscript);
+    setSpit(spit);
+    setLoading(false);
+  }
+
+  // @ts-ignore
+  // function formatSpit(toFormat) {
+  // 	return sanitizeHtml(md.render(toFormat), {
+  // 		allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'img'])
+  // 	});
+  // }
 
   return (
     <>
@@ -58,6 +92,15 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col items-center justify-center space-y-3 max-w-[500px] w-full">
+            <input
+              className="bg-gray-100 p-3 w-full"
+              value={AiAPIKey}
+              onChange={((e) => setAiAPIKey(e.target.value))}
+              name="apiKey"
+              type="text"
+              placeholder="OpenAI API Key"
+              disabled={loading}
+            />
             <input
               className="bg-gray-100 p-3 w-full"
               value={videoUrl}
